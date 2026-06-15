@@ -1,5 +1,5 @@
 resource "aws_iam_role" "eks_role" {
-  name = "eks-cluster-role"
+  name = "ekscluster-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -18,17 +18,25 @@ resource "aws_iam_role_policy_attachment" "eks_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
 }
 
+# ✅ Fix VPC (you had syntax error: tr)
 data "aws_vpc" "default" {
   default = true
 }
 
+# ✅ Fix subnets + AZ filtering (very important)
 data "aws_subnets" "default" {
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.default.id]
   }
+
+  filter {
+    name   = "availability-zone"
+    values = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  }
 }
 
+# ✅ EKS Cluster
 resource "aws_eks_cluster" "eks" {
   name     = var.cluster_name
   role_arn = aws_iam_role.eks_role.arn
