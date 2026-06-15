@@ -1,4 +1,4 @@
-name: Terraform EKS Deploy
+name: Terraform Cloud Trigger
 
 on:
   push:
@@ -6,21 +6,12 @@ on:
       - main
 
 jobs:
-  terraform:
+  trigger:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-
-      - name: Terraform Init
-        run: terraform init
-
-      - name: Terraform Plan
-        run: terraform plan
-
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+      - name: Just notify
+        run: echo "Code pushed - Terraform Cloud will handle deployment"
