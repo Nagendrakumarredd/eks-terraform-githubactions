@@ -1,3 +1,3 @@
 variable "cluster_name" {
-  default = "poc-cluster"
+  default = "poc-15-cluster"
 }
